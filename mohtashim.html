@@ -1,0 +1,170 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mohtashimhasan — Web Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0b14;
+    --bg-deep: #05060c;
+    --nebula: #6c4ab6;
+    --cyan: #4fd1ff;
+    --gold: #f5c15c;
+    --text: #e8e9f3;
+    --muted: #8388ab;
+    --line: rgba(232,233,243,0.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--bg); color:var(--text); font-family:'Inter', sans-serif; overflow-x:hidden; position:relative; }
+  canvas#stars{ position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; }
+  .content{ position:relative; z-index:1; }
+
+  nav{ display:flex; justify-content:space-between; align-items:center; padding:28px 6vw; position:relative; z-index:5; }
+  .brand{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:1.1rem; letter-spacing:0.02em; }
+
+  .hero{ min-height:88vh; display:flex; flex-direction:column; justify-content:center; padding:6vw; position:relative; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:clamp(2.6rem, 8vw, 6rem); line-height:0.98; letter-spacing:-0.02em; max-width:14ch; }
+  h1 .glow{ background:linear-gradient(120deg, var(--cyan), var(--nebula) 60%, var(--gold)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .role{ font-family:'JetBrains Mono', monospace; color:var(--muted); font-size:clamp(1rem,2.2vw,1.3rem); margin-top:24px; max-width:40ch; }
+  .hero-links{ display:flex; gap:16px; margin-top:44px; flex-wrap:wrap; }
+  .hero-links a{ font-family:'JetBrains Mono', monospace; font-size:0.85rem; text-decoration:none; color:var(--text); border:1px solid var(--line); padding:12px 22px; border-radius:100px; transition:all .25s ease; backdrop-filter:blur(6px); }
+  .hero-links a.primary{ background:var(--text); color:var(--bg-deep); border-color:var(--text); font-weight:600; }
+  .hero-links a:hover{ border-color:var(--cyan); color:var(--cyan); transform:translateY(-2px); }
+  .hero-links a.primary:hover{ color:var(--bg-deep); background:var(--cyan); border-color:var(--cyan); }
+
+  .orbit-wrap{ display:flex; justify-content:center; align-items:center; padding:8vh 6vw; position:relative; }
+  .orbit{ position:relative; width:min(70vw, 440px); aspect-ratio:1/1; border:1px dashed var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center; animation:spin 40s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .orbit::before{ content:''; position:absolute; inset:14%; border:1px dashed var(--line); border-radius:50%; }
+  .planet{ width:26%; aspect-ratio:1/1; border-radius:50%; background:radial-gradient(circle at 32% 28%, var(--cyan), var(--nebula) 55%, #1a1030 100%); box-shadow:0 0 60px rgba(108,74,182,0.5), 0 0 30px rgba(79,209,255,0.25); animation:counterspin 40s linear infinite; }
+  @keyframes counterspin{ to{ transform:rotate(-360deg); } }
+  .node{ position:absolute; font-family:'JetBrains Mono', monospace; font-size:0.72rem; background:var(--bg); border:1px solid var(--line); padding:6px 12px; border-radius:100px; color:var(--muted); animation:counterspin 40s linear infinite; white-space:nowrap; text-decoration:none; transition:all .25s ease; cursor:pointer; }
+  .node:hover{ border-color:var(--cyan); color:var(--cyan); box-shadow:0 0 16px rgba(79,209,255,0.25); }
+  .n1{ top:-4%; left:50%; transform:translateX(-50%); }
+  .n2{ bottom:6%; right:-6%; }
+  .n3{ bottom:6%; left:-6%; }
+
+  section{ padding:10vh 6vw; position:relative; }
+  .section-head{ display:flex; align-items:baseline; gap:18px; margin-bottom:48px; }
+  .section-num{ font-family:'JetBrains Mono', monospace; color:var(--nebula); font-size:0.9rem; }
+  .section-title{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:clamp(1.6rem,4vw,2.4rem); }
+
+  .card{ border:1px solid var(--line); border-radius:20px; padding:36px; background:linear-gradient(160deg, rgba(108,74,182,0.06), rgba(255,255,255,0.01)); backdrop-filter:blur(8px); }
+  .repo-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px; }
+  .repo{ border:1px solid var(--line); border-radius:16px; padding:24px; text-decoration:none; color:var(--text); transition:all .25s ease; display:block; }
+  .repo:hover{ border-color:var(--cyan); transform:translateY(-4px); box-shadow:0 12px 30px rgba(0,0,0,0.4); }
+  .repo-name{ font-family:'JetBrains Mono', monospace; font-weight:500; color:var(--cyan); font-size:0.95rem; margin-bottom:10px; }
+  .repo-desc{ color:var(--muted); font-size:0.88rem; line-height:1.5; }
+
+  footer{ padding:6vh 6vw 8vh; text-align:center; color:var(--muted); font-family:'JetBrains Mono', monospace; font-size:0.8rem; border-top:1px solid var(--line); }
+  footer a{ color:var(--cyan); text-decoration:none; }
+
+  @media (max-width:600px){ nav{ padding:22px 6vw; } .orbit{ width:80vw; } }
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+
+<div class="content">
+
+  <nav>
+    <div class="brand">Mohtashimprofile</div>
+  </nav>
+
+  <section class="hero">
+    <h1><span class="glow">Mohtashimhasan</span></h1>
+    <p class="role">Hi I am a Web developer building things for the web.</p>
+    <div class="hero-links">
+      <a class="primary" href="https://github.com/Mohtashimlearing" target="_blank" rel="noopener">github.com/Mohtashimlearing</a>
+      <a href="https://github.com/Mohtashimlearing?tab=repositories" target="_blank" rel="noopener">See repositories</a>
+    </div>
+  </section>
+
+  <div class="orbit-wrap">
+    <div class="orbit">
+      <div class="planet"></div>
+      <a class="node n1" href="https://www.roblox.com/users/3141024632/profile" target="_blank" rel="noopener">Roblox</a>
+      <a class="node n2" href="https://github.com/Mohtashimlearing?tab=followers" target="_blank" rel="noopener">Followers</a>
+      <a class="node n3" href="https://discord.gg/pJbyDCm9P" target="_blank" rel="noopener">Discord</a>
+    </div>
+  </div>
+
+  <section id="work">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2 class="section-title">From the repository</h2>
+    </div>
+    <div class="repo-grid">
+      <a class="repo" href="https://github.com/Mohtashimlearing?tab=repositories" target="_blank" rel="noopener">
+        <div class="repo-name">→ all repositories</div>
+        <div class="repo-desc">Browse the full list of projects on GitHub — the source of truth for what's actually being built.</div>
+      </a>
+      <a class="repo" href="https://github.com/Mohtashimlearing?tab=stars" target="_blank" rel="noopener">
+        <div class="repo-name">→ starred</div>
+        <div class="repo-desc">Tools, libraries, and ideas worth bookmarking along the way.</div>
+      </a>
+      <a class="repo" href="https://github.com/Mohtashimlearing" target="_blank" rel="noopener">
+        <div class="repo-name">→ profile</div>
+        <div class="repo-desc">The GitHub profile itself — activity, contributions, and everything else.</div>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>Built by Mohtashimhasan · <a href="https://github.com/Mohtashimlearing" target="_blank" rel="noopener">github.com/Mohtashimlearing</a></p>
+  </footer>
+
+</div>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let w, h, stars = [];
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = document.body.scrollHeight;
+    stars = [];
+    const count = Math.floor((w*h)/9000);
+    for(let i=0;i<count;i++){
+      stars.push({
+        x: Math.random()*w,
+        y: Math.random()*h,
+        r: Math.random()*1.4 + 0.3,
+        speed: Math.random()*0.15 + 0.02,
+        alpha: Math.random()*0.6 + 0.3,
+        tw: Math.random()*0.02
+      });
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle = '#05060c';
+    ctx.fillRect(0,0,w,h);
+    for(const s of stars){
+      s.alpha += (Math.random()-0.5)*s.tw;
+      s.alpha = Math.max(0.15, Math.min(0.9, s.alpha));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(232,233,243,${s.alpha})`;
+      ctx.fill();
+      s.y += s.speed;
+      if(s.y > h){ s.y = 0; s.x = Math.random()*w; }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+</script>
+
+</body>
+</html>
+```
